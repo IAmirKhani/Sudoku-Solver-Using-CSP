@@ -1,5 +1,6 @@
 from board import *
 
+# Return an empty cell if it exist
 def find_empty(board):
     for i in range(len(board)):
         for j in range(len(board[0])):
@@ -7,6 +8,7 @@ def find_empty(board):
                 return (i, j)
     return None
 
+# Check if the number being considered violates any constraints
 def is_valid(board, num, pos):
     # Check row
     for i in range(len(board[0])):
@@ -27,6 +29,7 @@ def is_valid(board, num, pos):
                 return False
     return True
 
+# The solve function uses the Backtracking algorithm to solve the Sudoku puzzle
 def solve(board):
     empty = find_empty(board)
     if not empty:
@@ -41,6 +44,7 @@ def solve(board):
             board[row][col] = 0
     return False
 
+# Finding the neighbors of a cell on the board
 def get_neighbors(pos):
     neighbors = []
 
@@ -62,6 +66,7 @@ def get_neighbors(pos):
 
     return neighbors
 
+# Implementing the Arc-3 algorithm for constraint satisfaction problems
 def ac3(board):
     queue = [(i, j) for i in range(9) for j in range(9) if board[i][j] == 0]
 
