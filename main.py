@@ -1,4 +1,5 @@
 from board import *
+import math
 
 # Return an empty cell if it exist
 def find_empty(board):
@@ -10,6 +11,9 @@ def find_empty(board):
 
 # Check if the number being considered violates any constraints
 def is_valid(board, num, pos):
+    n = len(board)
+    box_size = int(math.sqrt(n))
+
     # Check row
     for i in range(len(board[0])):
         if board[pos[0]][i] == num and pos[1] != i:
@@ -21,10 +25,10 @@ def is_valid(board, num, pos):
             return False
 
     # Check box
-    box_x = pos[1] // 3
-    box_y = pos[0] // 3
-    for i in range(box_y * 3, box_y * 3 + 3):
-        for j in range(box_x * 3, box_x * 3 + 3):
+    box_x = pos[1] // box_size
+    box_y = pos[0] // box_size
+    for i in range(box_y * box_size, box_y * box_size + box_size):
+        for j in range(box_x * box_size, box_x * box_size + box_size):
             if board[i][j] == num and (i, j) != pos:
                 return False
     return True
@@ -45,19 +49,20 @@ def solve(board):
     return False
 
 # Finding the neighbors of a cell on the board
-def get_neighbors(pos):
+def get_neighbors(pos, n):
     neighbors = []
-
+    box_size = int(math.sqrt(n))
+    
     # Row and column neighbors
     for i in range(9):
         neighbors.append((pos[0], i))
         neighbors.append((i, pos[1]))
 
     # Box neighbors
-    box_x = pos[1] // 3
-    box_y = pos[0] // 3
-    for i in range(box_y * 3, box_y * 3 + 3):
-        for j in range(box_x * 3, box_x * 3 + 3):
+    box_x = pos[1] // box_size
+    box_y = pos[0] // box_size
+    for i in range(box_y * box_size, box_y * box_size + box_size):
+        for j in range(box_x * box_size, box_x * box_size + box_size):
             neighbors.append((i, j))
 
     # Remove duplicates and the cell itself
@@ -68,11 +73,14 @@ def get_neighbors(pos):
 
 # Implementing the Arc-3 algorithm for constraint satisfaction problems
 def ac3(board):
+    n = len(board)
+    #box_size = int(math.sqrt(n))
+
     queue = [(i, j) for i in range(9) for j in range(9) if board[i][j] == 0]
 
     while queue:
         pos = queue.pop(0)
-        neighbors = get_neighbors(pos)
+        neighbors = get_neighbors(pos, n)
         for neighbor in neighbors:
             if revise(board, pos, neighbor):
                 if board[pos[0]][pos[1]] == 0:
