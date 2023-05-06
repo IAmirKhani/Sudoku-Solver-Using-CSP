@@ -1,5 +1,6 @@
 from board import *
 import math
+import time
 
 # Return an empty cell if it exist
 def find_empty(board):
@@ -74,7 +75,6 @@ def get_neighbors(pos, n):
 # Implementing the Arc-3 algorithm for constraint satisfaction problems
 def ac3(board):
     n = len(board)
-    #box_size = int(math.sqrt(n))
 
     queue = [(i, j) for i in range(n) for j in range(9) if board[i][j] == 0]
 
@@ -103,7 +103,8 @@ def solve_with_ac3(board):
     return solve(board)
 
 if __name__ == "__main__":
-    # Read input from user
+    start_time = time.time()
+    '''# Read input from user
     n = int(input().strip())  # size of the board
     c = int(input().strip())  # number of cells to fill
 
@@ -113,10 +114,29 @@ if __name__ == "__main__":
     # Fill in the cells with given values
     for _ in range(c):
         i, j, value = map(int, input().strip().split())
-        board[i-1][j-1] = value
+        board[i-1][j-1] = value'''
+    
+
+    # Open the file and read the contents
+    with open('sudoku_board.txt', 'r') as f:
+        lines = f.readlines()
+
+    # Get the board size and initialize the board
+    n = int(lines[0])
+    board = [[0] * n for _ in range(n)]
+
+    # Fill in the constant values
+    for i in range(2, int(lines[1]) + 2):
+        row, col, val = map(int, lines[i].split())
+        board[row][col] = val
     
     bd = Board(board)
     if solve_with_ac3(board):
         bd.print_board()
     else:
         print("Unsolvable CSP!")
+    
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+
+    print(f"Elapsed time: {elapsed_time} seconds")
