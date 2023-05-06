@@ -40,7 +40,7 @@ def solve(board):
         return True
     row, col = empty
 
-    for i in range(1, 10):
+    for i in range(1, len(board) + 1):
         if is_valid(board, i, (row, col)):
             board[row][col] = i
             if solve(board):
@@ -52,9 +52,9 @@ def solve(board):
 def get_neighbors(pos, n):
     neighbors = []
     box_size = int(math.sqrt(n))
-    
+
     # Row and column neighbors
-    for i in range(9):
+    for i in range(n):
         neighbors.append((pos[0], i))
         neighbors.append((i, pos[1]))
 
@@ -76,7 +76,7 @@ def ac3(board):
     n = len(board)
     #box_size = int(math.sqrt(n))
 
-    queue = [(i, j) for i in range(9) for j in range(9) if board[i][j] == 0]
+    queue = [(i, j) for i in range(n) for j in range(9) if board[i][j] == 0]
 
     while queue:
         pos = queue.pop(0)
